@@ -4,20 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VerbHero - Irregular Verbs</title>
-    <!-- PWA Manifest direkt integriert -->
-    <link rel="manifest" href="data:application/manifest+json,{
-        %22name%22: %22VerbHero%22,
-        %22short_name%22: %22VerbHero%22,
-        %22start_url%22: %22./index.html%22,
-        %22display%22: %22standalone%22,
-        %22background_color%22: %22%23f8fafc%22,
-        %22theme_color%22: %22%234f46e5%22,
-        %22icons%22: [{
-            %22src%22: %22https://api.iconify.design/fluent-emoji:superhero.svg%22,
-            %22sizes%22: %22192x192 512x512%22,
-            %22type%22: %22image/svg+xml%22
-        }]
-    }">
+    <!-- Verknüpfung zur externen Manifest-Datei -->
+    <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#4f46e5">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -82,13 +70,10 @@
 
     <!-- JAVASCRIPT LOGIK -->
     <script>
-        // PWA Service Worker Registrierung (Inline für Single-File)
+        // Service Worker registrieren
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                const swCode = `self.addEventListener('fetch', e => { e.respondWith(fetch(e.request).catch(() => caches.match(e.request))); });`;
-                const blob = new Blob([swCode], {type: 'text/javascript'});
-                const swUrl = URL.createObjectURL(blob);
-                navigator.serviceWorker.register(swUrl).catch(err => console.log('SW error', err));
+                navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW error', err));
             });
         }
 
