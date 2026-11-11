@@ -20,7 +20,7 @@
     <header class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex justify-between items-center mb-4">
         <div>
             <h1 class="text-xl font-bold text-indigo-600">VerbHero 🦸‍♂️</h1>
-            <p class="text-xs text-slate-400" id="current-category-label">Modus: Irreguläre Verben</p>
+            <p class="text-xs text-slate-400" id="current-selection-label">Hauptmenü</p>
         </div>
         <div class="flex gap-2">
             <div class="bg-amber-50 border border-amber-200 px-3 py-1 rounded-xl flex items-center gap-1">
@@ -34,56 +34,57 @@
         </div>
     </header>
 
-    <!-- MAIN GAME AREA -->
+    <!-- MAIN CONTAINER -->
     <main id="app-container" class="flex-1 flex flex-col justify-center">
-        <!-- Kategorie-Auswahl (Neu!) -->
-        <div id="category-screen" class="space-y-3">
-            <h2 class="text-center text-slate-600 font-bold mb-2">Was möchtest du üben?</h2>
+        
+        <!-- 1. HAUPTMENÜ: Wähle das Spiel / den Modus -->
+        <div id="mode-select-screen" class="space-y-3">
+            <h2 class="text-center text-slate-600 font-bold mb-3">Wähle deinen Spielmodus!</h2>
             
-            <button onclick="selectCategory('verbs')" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
-                <span>⚡ Irregular Verbs</span>
-                <span class="text-sm bg-indigo-700 px-2 py-1 rounded-lg">24 Verben</span>
-            </button>
-            <button onclick="selectCategory('unit1')" class="w-full bg-teal-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
-                <span>📚 Vokabeln: Unit 1</span>
-                <span class="text-sm bg-teal-600 px-2 py-1 rounded-lg">Schule & Alltag</span>
-            </button>
-            <button onclick="selectCategory('unit2')" class="w-full bg-cyan-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
-                <span>📚 Vokabeln: Unit 2</span>
-                <span class="text-sm bg-cyan-600 px-2 py-1 rounded-lg">Hobby & Freizeit</span>
-            </button>
-        </div>
-
-        <!-- Spielmodus-Menü (erscheint nach Kategoriewahl) -->
-        <div id="menu-screen" class="hidden space-y-3">
-            <h2 class="text-center text-slate-600 font-bold mb-4">Wähle deinen Trainingsmodus!</h2>
-            <button onclick="startMode('match')" class="w-full bg-indigo-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+            <button onclick="openCategoryScreen('match')" class="w-full bg-indigo-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
                 <span>🧩 Triple Match</span>
                 <span class="text-sm bg-indigo-600 px-2 py-1 rounded-lg">Klassisch</span>
             </button>
-            <button onclick="startMode('detective')" class="w-full bg-emerald-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+            <button onclick="openCategoryScreen('detective')" class="w-full bg-emerald-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
                 <span>🔍 Lücken-Detektiv</span>
                 <span class="text-sm bg-emerald-600 px-2 py-1 rounded-lg">Sätze</span>
             </button>
-            <button onclick="startMode('listening')" class="w-full bg-sky-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+            <button onclick="openCategoryScreen('listening')" class="w-full bg-sky-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
                 <span>🎧 Hör-Trainer</span>
                 <span class="text-sm bg-sky-600 px-2 py-1 rounded-lg">Audio</span>
             </button>
-            <button onclick="startMode('runner')" class="w-full bg-rose-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+            <button onclick="startRunner()" class="w-full bg-rose-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
                 <span>♞ Springer Arcade</span>
                 <span class="text-sm bg-rose-600 px-2 py-1 rounded-lg">1 🪙 Kosten</span>
             </button>
         </div>
 
-        <!-- Dynamischer Spielbereich -->
+        <!-- 2. KATEGORIE-AUSWAHL: Welche Vokabeln / Unit? -->
+        <div id="category-screen" class="hidden space-y-3">
+            <h2 class="text-center text-slate-600 font-bold mb-3" id="category-title">Was möchtest du üben?</h2>
+            
+            <button onclick="startLearning('verbs')" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+                <span>⚡ Irregular Verbs</span>
+                <span class="text-sm bg-indigo-700 px-2 py-1 rounded-lg">24 Verben</span>
+            </button>
+            <button onclick="startLearning('unit1')" class="w-full bg-teal-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+                <span>📚 Vokabeln: Unit 1</span>
+                <span class="text-sm bg-teal-600 px-2 py-1 rounded-lg">Schule & Alltag</span>
+            </button>
+            <button onclick="startLearning('unit2')" class="w-full bg-cyan-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+                <span>📚 Vokabeln: Unit 2</span>
+                <span class="text-sm bg-cyan-600 px-2 py-1 rounded-lg">Hobby & Freizeit</span>
+            </button>
+        </div>
+
+        <!-- 3. SPIELBEREICH -->
         <div id="game-screen" class="hidden flex flex-col items-center justify-center"></div>
     </main>
 
     <!-- FOOTER NAVIGATION -->
     <footer class="mt-4 flex justify-between items-center px-2">
-        <button onclick="returnToCategories()" id="cat-back-btn" class="text-sm bg-slate-200 text-slate-700 px-3 py-2 rounded-xl font-bold">📂 Andere Unit</button>
-        <button onclick="returnToMenu()" id="back-btn" class="hidden text-sm bg-slate-200 text-slate-700 px-3 py-2 rounded-xl font-bold">⬅️ Zum Menü</button>
-        <p class="text-xs text-slate-400">VerbHero PWA</p>
+        <button onclick="returnToMain()" id="back-btn" class="text-sm bg-slate-200 text-slate-700 px-3 py-2 rounded-xl font-bold hidden">⬅️ Zurück zum Hauptmenü</button>
+        <p class="text-xs text-slate-400 ml-auto">VerbHero PWA</p>
     </footer>
 
     <!-- JAVASCRIPT LOGIK -->
@@ -107,7 +108,6 @@
             }
         }
 
-        // DATENBANK: Hier kannst du ganz einfach Verben und Vokabeln nach Units pflegen!
         const wordPools = {
             verbs: [
                 { base: "be", target: "was/were", de: "sein", sentence: "He ___ happy yesterday." },
@@ -116,7 +116,7 @@
                 { base: "eat", target: "ate", de: "essen", sentence: "They ___ an apple." },
                 { base: "make", target: "made", de: "machen", sentence: "We ___ a cake." },
                 { base: "run", target: "ran", de: "laufen", sentence: "He ___ very fast." },
-                { base: "take", target: "took", de: "nehmen", sentence: "She ___ her bag." },
+                { base: "take", target: "took", de: "taken", de_trans: "nehmen", sentence: "She ___ her bag." },
                 { base: "write", target: "wrote", de: "schreiben", sentence: "I ___ a letter." },
                 { base: "give", target: "gave", de: "geben", sentence: "You ___ me a gift." },
                 { base: "come", target: "came", de: "kommen", sentence: "They ___ home." },
@@ -150,23 +150,39 @@
             ]
         };
 
-        let currentKey = 'verbs';
+        let selectedGame = 'match';
+        let currentCategory = 'verbs';
         let currentItems = wordPools.verbs;
         let state = { xp: 0, tokens: 0 };
 
-        function selectCategory(key) {
-            currentKey = key;
-            currentItems = wordPools[key];
-            document.getElementById('current-category-label').innerText = "Modus: " + (key === 'verbs' ? 'Irreguläre Verben' : key.toUpperCase());
-            document.getElementById('category-screen').classList.add('hidden');
-            document.getElementById('menu-screen').classList.remove('hidden');
+        function openCategoryScreen(gameMode) {
+            selectedGame = gameMode;
+            document.getElementById('mode-select-screen').classList.add('hidden');
+            document.getElementById('category-screen').classList.remove('hidden');
+            document.getElementById('back-btn').classList.remove('hidden');
+            document.getElementById('current-selection-label').innerText = "Modus wählen";
         }
 
-        function returnToCategories() {
-            document.getElementById('menu-screen').classList.add('hidden');
+        function startLearning(categoryKey) {
+            currentCategory = categoryKey;
+            currentItems = wordPools[categoryKey];
+            let catName = categoryKey === 'verbs' ? 'Irregular Verbs' : categoryKey.toUpperCase();
+            document.getElementById('current-selection-label').innerText = catName + " (" + selectedGame.toUpperCase() + ")";
+            
+            document.getElementById('category-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+
+            if (selectedGame === 'match') initMatchGame();
+            else if (selectedGame === 'detective') initDetectiveGame();
+            else if (selectedGame === 'listening') initListeningGame();
+        }
+
+        function returnToMain() {
+            document.getElementById('mode-select-screen').classList.remove('hidden');
+            document.getElementById('category-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.add('hidden');
-            document.getElementById('category-screen').classList.remove('hidden');
             document.getElementById('back-btn').classList.add('hidden');
+            document.getElementById('current-selection-label').innerText = "Hauptmenü";
             if(window.currentGameInterval) clearInterval(window.currentGameInterval);
         }
 
@@ -183,33 +199,6 @@
         function updateHUD() {
             document.getElementById('xp-display').innerText = state.xp;
             document.getElementById('token-display').innerText = state.tokens;
-        }
-
-        function returnToMenu() {
-            document.getElementById('menu-screen').classList.remove('hidden');
-            document.getElementById('game-screen').classList.add('hidden');
-            document.getElementById('back-btn').classList.add('hidden');
-            if(window.currentGameInterval) clearInterval(window.currentGameInterval);
-        }
-
-        function startMode(mode) {
-            if (mode === 'runner') {
-                if (state.tokens < 1) {
-                    alert("Du brauchst mindestens 1 🪙 Token, um Springer Arcade zu spielen!\n\nLerne zuerst Vokabeln, um XP zu sammeln!");
-                    return;
-                }
-                state.tokens--;
-                updateHUD();
-            }
-
-            document.getElementById('menu-screen').classList.add('hidden');
-            document.getElementById('game-screen').classList.remove('hidden');
-            document.getElementById('back-btn').classList.remove('hidden');
-
-            if (mode === 'match') initMatchGame();
-            else if (mode === 'detective') initDetectiveGame();
-            else if (mode === 'listening') initListeningGame();
-            else if (mode === 'runner') initRunnerGame();
         }
 
         function initMatchGame() {
@@ -322,19 +311,37 @@
             });
         }
 
+        function startRunner() {
+            if (state.tokens < 1) {
+                alert("Du brauchst mindestens 1 🪙 Token, um Springer Arcade zu spielen!\n\nLerne zuerst Vokabeln im Hauptmenü, um XP und Token zu sammeln!");
+                return;
+            }
+            state.tokens--;
+            updateHUD();
+
+            document.getElementById('mode-select-screen').classList.add('hidden');
+            document.getElementById('category-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            document.getElementById('back-btn').classList.remove('hidden');
+            document.getElementById('current-selection-label').innerText = "Springer Arcade 🪙";
+
+            initRunnerGame();
+        }
+
         function initRunnerGame() {
             const container = document.getElementById('game-screen');
             container.innerHTML = `
                 <div class="text-center w-full">
                     <canvas id="runnerCanvas" width="320" height="200" class="bg-slate-900 rounded-2xl shadow-inner mx-auto border-4 border-slate-800"></canvas>
-                    <p class="text-xs text-slate-400 mt-2">Tippe auf den Bildschirm oder drücke Leertaste!</p>
+                    <p class="text-xs text-slate-400 mt-2">Tippe oder Leertaste zum Springen! Wird schneller mit jedem Punkt.</p>
                 </div>
             `;
             const canvas = document.getElementById('runnerCanvas');
             const ctx = canvas.getContext('2d');
-            let p = { x: 40, y: 140, w: 30, h: 30, vy: 0, gravity: 0.8, jump: -11, grounded: true };
+            let p = { x: 40, y: 140, w: 30, h: 30, vy: 0, gravity: 0.7, jump: -10, grounded: true };
             let obstacles = [];
             let score = 0;
+            let highScore = localStorage.getItem('verbhero_highscore') || 0;
             let gameOver = false;
 
             window.onkeydown = (e) => { if(e.code === 'Space') jumpAction(); };
@@ -342,13 +349,17 @@
 
             function jumpAction() {
                 if (p.grounded && !gameOver) { p.vy = p.jump; p.grounded = false; }
-                if (gameOver) startMode('runner');
+                if (gameOver) startRunner();
             }
 
             if(window.currentGameInterval) clearInterval(window.currentGameInterval);
+            
             window.currentGameInterval = setInterval(() => {
                 if (gameOver) return;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Dynamische Geschwindigkeit je nach Score (wird allmählich schneller, fängt aber kinderfreundlich an)
+                let gameSpeed = 3 + Math.min(score / 150, 4.5);
 
                 p.vy += p.gravity;
                 p.y += p.vy;
@@ -358,32 +369,44 @@
                 ctx.font = '28px sans-serif';
                 ctx.fillText('♞', p.x, p.y + 24);
 
-                if (Math.random() < 0.02) obstacles.push({ x: 320, y: 145, w: 25, h: 25, type: ['♙','♖','♗'][Math.floor(Math.random()*3)] });
+                // Hindernis-Spawn-Rate passt sich an
+                if (Math.random() < (0.012 + Math.min(score / 10000, 0.01))) {
+                    obstacles.push({ x: 320, y: 145, w: 25, h: 25, type: ['♙','♖','♗'][Math.floor(Math.random()*3)] });
+                }
 
                 obstacles.forEach((obs) => {
-                    obs.x -= 4;
+                    obs.x -= gameSpeed;
                     ctx.fillText(obs.type, obs.x, obs.y + 22);
                     if (p.x < obs.x + obs.w && p.x + p.w > obs.x && p.y < obs.y + obs.h && p.y + p.h > obs.y) {
                         gameOver = true;
+                        if (score > highScore) {
+                            highScore = score;
+                            localStorage.setItem('verbhero_highscore', highScore);
+                        }
                     }
                 });
 
                 obstacles = obstacles.filter(obs => obs.x > -40);
                 score++;
+
+                // Score und Highscore anzeigen
                 ctx.fillStyle = '#fff';
-                ctx.font = '14px Fredoka';
-                ctx.fillText("Score: " + score, 15, 25);
+                ctx.font = '13px Fredoka';
+                ctx.fillText("Score: " + score, 15, 22);
+                ctx.fillText("Highscore: " + highScore, 15, 40);
 
                 if(gameOver) {
-                    ctx.fillStyle = 'rgba(0,0,0,0.75)';
+                    ctx.fillStyle = 'rgba(0,0,0,0.8)';
                     ctx.fillRect(0,0,canvas.width,canvas.height);
                     ctx.fillStyle = '#fff';
                     ctx.font = '16px Fredoka';
-                    ctx.fillText("Game Over!", 115, 80);
-                    ctx.fillText("Dein Score: " + score, 105, 110);
-                    ctx.font = '12px Fredoka';
+                    ctx.fillText("Game Over!", 115, 75);
+                    ctx.fillText("Score: " + score, 125, 100);
+                    ctx.fillStyle = '#facc15';
+                    ctx.fillText("Highscore: " + highScore, 105, 122);
+                    ctx.font = '11px Fredoka';
                     ctx.fillStyle = '#cbd5e1';
-                    ctx.fillText("Tippen für Neustart (Kosten: 1 🪙)", 60, 145);
+                    ctx.fillText("Tippen für Neustart (Kosten: 1 🪙)", 60, 160);
                 }
             }, 1000/60);
         }
