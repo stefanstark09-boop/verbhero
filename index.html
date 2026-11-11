@@ -37,13 +37,13 @@
     <!-- MAIN CONTAINER -->
     <main id="app-container" class="flex-1 flex flex-col justify-center">
         
-        <!-- 1. HAUPTMENÜ: Wähle das Spiel / den Modus -->
+        <!-- 1. HAUPTMENÜ -->
         <div id="mode-select-screen" class="space-y-3">
             <h2 class="text-center text-slate-600 font-bold mb-3">Wähle deinen Spielmodus!</h2>
             
             <button onclick="openCategoryScreen('match')" class="w-full bg-indigo-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
                 <span>🧩 Triple Match</span>
-                <span class="text-sm bg-indigo-600 px-2 py-1 rounded-lg">Klassisch</span>
+                <span class="text-sm bg-indigo-600 px-2 py-1 rounded-lg">3 Formen / Match</span>
             </button>
             <button onclick="openCategoryScreen('detective')" class="w-full bg-emerald-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
                 <span>🔍 Lücken-Detektiv</span>
@@ -59,13 +59,13 @@
             </button>
         </div>
 
-        <!-- 2. KATEGORIE-AUSWAHL: Welche Vokabeln / Unit? -->
+        <!-- 2. KATEGORIE-AUSWAHL -->
         <div id="category-screen" class="hidden space-y-3">
-            <h2 class="text-center text-slate-600 font-bold mb-3" id="category-title">Was möchtest du üben?</h2>
+            <h2 class="text-center text-slate-600 font-bold mb-3">Was möchtest du üben?</h2>
             
             <button onclick="startLearning('verbs')" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
                 <span>⚡ Irregular Verbs</span>
-                <span class="text-sm bg-indigo-700 px-2 py-1 rounded-lg">24 Verben</span>
+                <span class="text-sm bg-indigo-700 px-2 py-1 rounded-lg">24 Verben (3 Formen)</span>
             </button>
             <button onclick="startLearning('unit1')" class="w-full bg-teal-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
                 <span>📚 Vokabeln: Unit 1</span>
@@ -83,7 +83,7 @@
 
     <!-- FOOTER NAVIGATION -->
     <footer class="mt-4 flex justify-between items-center px-2">
-        <button onclick="returnToMain()" id="back-btn" class="text-sm bg-slate-200 text-slate-700 px-3 py-2 rounded-xl font-bold hidden">⬅️ Zurück zum Hauptmenü</button>
+        <button onclick="returnToMain()" id="back-btn" class="text-sm bg-slate-200 text-slate-700 px-3 py-2 rounded-xl font-bold hidden">⬅️ Hauptmenü</button>
         <p class="text-xs text-slate-400 ml-auto">VerbHero PWA</p>
     </footer>
 
@@ -110,30 +110,30 @@
 
         const wordPools = {
             verbs: [
-                { base: "be", target: "was/were", de: "sein", sentence: "He ___ happy yesterday." },
-                { base: "go", target: "went", de: "gehen", sentence: "She ___ to school." },
-                { base: "see", target: "saw", de: "sehen", sentence: "I ___ a cute dog." },
-                { base: "eat", target: "ate", de: "essen", sentence: "They ___ an apple." },
-                { base: "make", target: "made", de: "machen", sentence: "We ___ a cake." },
-                { base: "run", target: "ran", de: "laufen", sentence: "He ___ very fast." },
-                { base: "take", target: "took", de: "taken", de_trans: "nehmen", sentence: "She ___ her bag." },
-                { base: "write", target: "wrote", de: "schreiben", sentence: "I ___ a letter." },
-                { base: "give", target: "gave", de: "geben", sentence: "You ___ me a gift." },
-                { base: "come", target: "came", de: "kommen", sentence: "They ___ home." },
-                { base: "have", target: "had", de: "haben", sentence: "He ___ a cat." },
-                { base: "do", target: "did", de: "tun / machen", sentence: "She ___ her homework." },
-                { base: "buy", target: "bought", de: "kaufen", sentence: "We ___ a new car." },
-                { base: "catch", target: "caught", de: "fangen", sentence: "He ___ the ball." },
-                { base: "find", target: "found", de: "finden", sentence: "I ___ my keys." },
-                { base: "get", target: "got", de: "bekommen", sentence: "She ___ a present." },
-                { base: "know", target: "knew", de: "wissen", sentence: "He ___ the answer." },
-                { base: "speak", target: "spoke", de: "sprechen", sentence: "They ___ English." },
-                { base: "break", target: "broke", de: "brechen", sentence: "He ___ the stick." },
-                { base: "drink", target: "drank", de: "trinken", sentence: "She ___ water." },
-                { base: "fly", target: "flew", de: "fliegen", sentence: "Birds ___ high." },
-                { base: "sing", target: "sang", de: "singend", sentence: "We ___ a song." },
-                { base: "swim", target: "swam", de: "schwimmen", sentence: "He ___ in the pool." },
-                { base: "think", target: "thought", de: "denken", sentence: "I ___ about it." }
+                { base: "be", past: "was/were", pp: "been", de: "sein", sentence: "He ___ happy yesterday." },
+                { base: "go", past: "went", pp: "gone", de: "gehen", sentence: "She ___ to school." },
+                { base: "see", past: "saw", pp: "seen", de: "sehen", sentence: "I ___ a cute dog." },
+                { base: "eat", past: "ate", pp: "eaten", de: "essen", sentence: "They ___ an apple." },
+                { base: "make", past: "made", pp: "made", de: "machen", sentence: "We ___ a cake." },
+                { base: "run", past: "ran", pp: "run", de: "laufen", sentence: "He ___ very fast." },
+                { base: "take", past: "took", pp: "taken", de: "nehmen", sentence: "She ___ her bag." },
+                { base: "write", past: "wrote", pp: "written", de: "schreiben", sentence: "I ___ a letter." },
+                { base: "give", past: "gave", pp: "given", de: "geben", sentence: "You ___ me a gift." },
+                { base: "come", past: "came", pp: "come", de: "kommen", sentence: "They ___ home." },
+                { base: "have", past: "had", pp: "had", de: "haben", sentence: "He ___ a cat." },
+                { base: "do", past: "did", pp: "done", de: "tun / machen", sentence: "She ___ her homework." },
+                { base: "buy", past: "bought", pp: "bought", de: "kaufen", sentence: "We ___ a new car." },
+                { base: "catch", past: "caught", pp: "caught", de: "fangen", sentence: "He ___ the ball." },
+                { base: "find", past: "found", pp: "found", de: "finden", sentence: "I ___ my keys." },
+                { base: "get", past: "got", pp: "gotten", de: "bekommen", sentence: "She ___ a present." },
+                { base: "know", past: "knew", pp: "known", de: "wissen", sentence: "He ___ the answer." },
+                { base: "speak", past: "spoke", pp: "spoken", de: "sprechen", sentence: "They ___ English." },
+                { base: "break", past: "broke", pp: "broken", de: "brechen", sentence: "He ___ the stick." },
+                { base: "drink", past: "drank", pp: "drunk", de: "trinken", sentence: "She ___ water." },
+                { base: "fly", past: "flew", pp: "flown", de: "fliegen", sentence: "Birds ___ high." },
+                { base: "sing", past: "sang", pp: "sung", de: "singend", sentence: "We ___ a song." },
+                { base: "swim", past: "swam", pp: "swum", de: "schwimmen", sentence: "He ___ in the pool." },
+                { base: "think", past: "thought", pp: "thought", de: "denken", sentence: "I ___ about it." }
             ],
             unit1: [
                 { base: "schoolbag", target: "schoolbag", de: "Schultasche", sentence: "I put books in my ___." },
@@ -204,43 +204,84 @@
         function initMatchGame() {
             const container = document.getElementById('game-screen');
             const item = currentItems[Math.floor(Math.random() * currentItems.length)];
-            speakWord(item.base);
 
-            container.innerHTML = `
-                <div class="text-center space-y-4 w-full">
-                    <h3 class="font-bold text-slate-700">Finde die Übersetzung für: <span class="text-indigo-600 text-xl">${item.de}</span></h3>
-                    <button onclick="speakWord('${item.base}')" class="bg-sky-100 text-sky-600 px-3 py-1 rounded-full text-sm font-bold">🔊 Anhören</button>
-                    <div class="grid grid-cols-2 gap-3 mt-4" id="options"></div>
-                </div>
-            `;
+            if (currentCategory === 'verbs') {
+                // TRIPLE MATCH für Unregelmäßige Verben (Grundform, Simple Past, Past Participle)
+                speakWord(item.base);
+                let correctCombination = `${item.base} ➔ ${item.past} ➔ ${item.pp}`;
 
-            const optionsContainer = document.getElementById('options');
-            let choices = [item.target];
-            while(choices.length < 4) {
-                let randomItem = currentItems[Math.floor(Math.random() * currentItems.length)].target;
-                if(!choices.includes(randomItem)) choices.push(randomItem);
+                container.innerHTML = `
+                    <div class="text-center space-y-4 w-full">
+                        <h3 class="font-bold text-slate-700">Finde die 3 Formen für: <span class="text-indigo-600 text-xl">${item.de}</span></h3>
+                        <button onclick="speakWord('${item.base}')" class="bg-sky-100 text-sky-600 px-3 py-1 rounded-full text-sm font-bold">🔊 Anhören</button>
+                        <div class="grid grid-cols-1 gap-2 mt-4" id="options"></div>
+                    </div>
+                `;
+
+                const optionsContainer = document.getElementById('options');
+                let choices = [correctCombination];
+                while(choices.length < 4) {
+                    let r1 = currentItems[Math.floor(Math.random() * currentItems.length)];
+                    let combo = `${r1.base} ➔ ${r1.past} ➔ ${r1.pp}`;
+                    if(!choices.includes(combo)) choices.push(combo);
+                }
+                choices.sort(() => Math.random() - 0.5);
+
+                choices.forEach(choice => {
+                    const btn = document.createElement('button');
+                    btn.className = "bg-white border-2 border-slate-200 p-3 rounded-2xl font-bold text-sm hover:border-indigo-500 arcade-btn w-full";
+                    btn.innerText = choice;
+                    btn.onclick = () => {
+                        if(choice === correctCombination) {
+                            addXP(15);
+                            initMatchGame();
+                        } else {
+                            btn.classList.add('bg-rose-50', 'border-rose-300');
+                        }
+                    };
+                    optionsContainer.appendChild(btn);
+                });
+
+            } else {
+                // Normales Match für Vokabel-Units (Wort & Übersetzung)
+                speakWord(item.base);
+                container.innerHTML = `
+                    <div class="text-center space-y-4 w-full">
+                        <h3 class="font-bold text-slate-700">Finde die Übersetzung für: <span class="text-indigo-600 text-xl">${item.de}</span></h3>
+                        <button onclick="speakWord('${item.base}')" class="bg-sky-100 text-sky-600 px-3 py-1 rounded-full text-sm font-bold">🔊 Anhören</button>
+                        <div class="grid grid-cols-2 gap-3 mt-4" id="options"></div>
+                    </div>
+                `;
+
+                const optionsContainer = document.getElementById('options');
+                let choices = [item.target];
+                while(choices.length < 4) {
+                    let randomItem = currentItems[Math.floor(Math.random() * currentItems.length)].target;
+                    if(!choices.includes(randomItem)) choices.push(randomItem);
+                }
+                choices.sort(() => Math.random() - 0.5);
+
+                choices.forEach(choice => {
+                    const btn = document.createElement('button');
+                    btn.className = "bg-white border-2 border-slate-200 p-4 rounded-2xl font-bold text-lg hover:border-indigo-500 arcade-btn";
+                    btn.innerText = choice;
+                    btn.onclick = () => {
+                        if(choice === item.target) {
+                            addXP(10);
+                            initMatchGame();
+                        } else {
+                            btn.classList.add('bg-rose-50', 'border-rose-300');
+                        }
+                    };
+                    optionsContainer.appendChild(btn);
+                });
             }
-            choices.sort(() => Math.random() - 0.5);
-
-            choices.forEach(choice => {
-                const btn = document.createElement('button');
-                btn.className = "bg-white border-2 border-slate-200 p-4 rounded-2xl font-bold text-lg hover:border-indigo-500 arcade-btn";
-                btn.innerText = choice;
-                btn.onclick = () => {
-                    if(choice === item.target) {
-                        addXP(10);
-                        initMatchGame();
-                    } else {
-                        btn.classList.add('bg-rose-50', 'border-rose-300');
-                    }
-                };
-                optionsContainer.appendChild(btn);
-            });
         }
 
         function initDetectiveGame() {
             const container = document.getElementById('game-screen');
             const item = currentItems[Math.floor(Math.random() * currentItems.length)];
+            let targetValue = currentCategory === 'verbs' ? item.past : item.target;
             
             container.innerHTML = `
                 <div class="text-center space-y-4 w-full">
@@ -251,10 +292,11 @@
             `;
 
             const optionsContainer = document.getElementById('detective-options');
-            let choices = [item.target];
+            let choices = [targetValue];
             while(choices.length < 4) {
-                let randomItem = currentItems[Math.floor(Math.random() * currentItems.length)].target;
-                if(!choices.includes(randomItem)) choices.push(randomItem);
+                let rItem = currentItems[Math.floor(Math.random() * currentItems.length)];
+                let val = currentCategory === 'verbs' ? rItem.past : rItem.target;
+                if(!choices.includes(val)) choices.push(val);
             }
             choices.sort(() => Math.random() - 0.5);
 
@@ -263,7 +305,7 @@
                 btn.className = "bg-white border-2 border-slate-200 p-4 rounded-2xl font-bold text-lg hover:border-emerald-500 arcade-btn";
                 btn.innerText = choice;
                 btn.onclick = () => {
-                    if(choice === item.target) {
+                    if(choice === targetValue) {
                         addXP(15);
                         initDetectiveGame();
                     } else {
@@ -333,12 +375,12 @@
             container.innerHTML = `
                 <div class="text-center w-full">
                     <canvas id="runnerCanvas" width="320" height="200" class="bg-slate-900 rounded-2xl shadow-inner mx-auto border-4 border-slate-800"></canvas>
-                    <p class="text-xs text-slate-400 mt-2">Tippe oder Leertaste zum Springen! Wird schneller mit jedem Punkt.</p>
+                    <p class="text-xs text-slate-400 mt-2">Tippe oder Leertaste zum Springen! Entspanntes Tempo.</p>
                 </div>
             `;
             const canvas = document.getElementById('runnerCanvas');
             const ctx = canvas.getContext('2d');
-            let p = { x: 40, y: 140, w: 30, h: 30, vy: 0, gravity: 0.7, jump: -10, grounded: true };
+            let p = { x: 40, y: 140, w: 30, h: 30, vy: 0, gravity: 0.6, jump: -9.5, grounded: true };
             let obstacles = [];
             let score = 0;
             let highScore = localStorage.getItem('verbhero_highscore') || 0;
@@ -358,8 +400,8 @@
                 if (gameOver) return;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                // Dynamische Geschwindigkeit je nach Score (wird allmählich schneller, fängt aber kinderfreundlich an)
-                let gameSpeed = 3 + Math.min(score / 150, 4.5);
+                // Viel langsamere und sanftere Geschwindigkeitssteigerung, damit 200+ Punkte leicht machbar sind
+                let gameSpeed = 2.4 + Math.min(score / 300, 3.0);
 
                 p.vy += p.gravity;
                 p.y += p.vy;
@@ -369,8 +411,8 @@
                 ctx.font = '28px sans-serif';
                 ctx.fillText('♞', p.x, p.y + 24);
 
-                // Hindernis-Spawn-Rate passt sich an
-                if (Math.random() < (0.012 + Math.min(score / 10000, 0.01))) {
+                // Hindernisse kommen in etwas größeren Abständen
+                if (Math.random() < (0.009 + Math.min(score / 15000, 0.006))) {
                     obstacles.push({ x: 320, y: 145, w: 25, h: 25, type: ['♙','♖','♗'][Math.floor(Math.random()*3)] });
                 }
 
@@ -389,7 +431,6 @@
                 obstacles = obstacles.filter(obs => obs.x > -40);
                 score++;
 
-                // Score und Highscore anzeigen
                 ctx.fillStyle = '#fff';
                 ctx.font = '13px Fredoka';
                 ctx.fillText("Score: " + score, 15, 22);
