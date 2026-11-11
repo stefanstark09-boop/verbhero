@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VerbHero - Irregular Verbs</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
+        body { font-family: 'Fredoka', sans-serif; background-color: #f8fafc; color: #1e293b; user-select: none; }
+        .arcade-btn { transition: all 0.1s ease; box-shadow: 0 4px 0 #cbd5e1; cursor: pointer; }
+        .arcade-btn:active { transform: translateY(4px); box-shadow: 0 0 0 #cbd5e1; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 max-w-md mx-auto">
+
+    <!-- HEADER / DASHBOARD -->
+    <header class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex justify-between items-center mb-4">
+        <div>
+            <h1 class="text-xl font-bold text-indigo-600">VerbHero 🦸‍♂️</h1>
+            <p class="text-xs text-slate-400">Level 2: Irregular Verbs</p>
+        </div>
+        <div class="flex gap-2">
+            <div class="bg-amber-50 border border-amber-200 px-3 py-1 rounded-xl flex items-center gap-1">
+                <span class="text-amber-500 font-bold" id="xp-display">0</span>
+                <span class="text-xs text-amber-600 uppercase font-bold">XP</span>
+            </div>
+            <div class="bg-purple-50 border border-purple-200 px-3 py-1 rounded-xl flex items-center gap-1">
+                <span class="text-purple-600 font-bold" id="token-display">0</span>
+                <span class="text-xs text-purple-600">🪙</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN GAME AREA -->
+    <main id="app-container" class="flex-1 flex flex-col justify-center">
+        <!-- Dashboard / Menü -->
+        <div id="menu-screen" class="space-y-3">
+            <h2 class="text-center text-slate-600 font-bold mb-4">Wähle deinen Trainingsmodus!</h2>
+            <button onclick="startMode('match')" class="w-full bg-indigo-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+                <span>🧩 Triple Match</span>
+                <span class="text-sm bg-indigo-600 px-2 py-1 rounded-lg">Klassisch</span>
+            </button>
+            <button onclick="startMode('detective')" class="w-full bg-emerald-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+                <span>🔍 Lücken-Detektiv</span>
+                <span class="text-sm bg-emerald-600 px-2 py-1 rounded-lg">Sätze</span>
+            </button>
+            <button onclick="startMode('listening')" class="w-full bg-sky-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+                <span>🎧 Hör-Trainer</span>
+                <span class="text-sm bg-sky-600 px-2 py-1 rounded-lg">Audio</span>
+            </button>
+            <button onclick="startMode('runner')" class="w-full bg-rose-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+                <span>♞ Springer Arcade</span>
+                <span class="text-sm bg-rose-600 px-2 py-1 rounded-lg">1 🪙 Kosten</span>
+            </button>
+        </div>
+
+        <!-- Dynamischer Spielbereich -->
+        <div id="game-screen" class="hidden flex flex-col items-center justify-center"></div>
+    </main>
+
+    <!-- FOOTER NAVIGATION -->
+    <footer class="mt-4 text-center">
+        <button onclick="returnToMenu()" id="back-btn" class="hidden text-sm bg-slate-200 text-slate-700 px-4 py-2 rounded-xl font-bold">⬅️ Zurück zum Menü</button>
+        <p class="text-xs text-slate-400 mt-2">VerbHero PWA • Für Jakob ⚡</p>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIK -->
+    <script>
+        // PWA SERVICE WORKER REGISTRATION (With Safe IFrame Check)
+        if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+            window.addEventListener('load', () => {
+                try {
+                    if (window.self !== window.top) {
+                        console.log('Running in Preview / iFrame mode: Service Worker disabled.');
+                        return;
+                    }
+                    navigator.serviceWorker.register('./sw.js')
+                        .then(reg => console.log('PWA Service Worker registered:', reg.scope))
+                        .catch(err => console.log('Service Worker skipped:', err.message));
+                } catch (e) {
+                    console.log('Service worker suppressed:', e);
+                }
+            });
+        }
+
+        // TEXT TO SPEECH (With Error Handling for Preview IFrames)
+        function speakWord(text) {
+            if (!('speechSynthesis' in window)) return;
+            try {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.85;
+                window.speechSynthesis.speak(utterance);
+            } catch (e) {
+                console.log('Speech synthesis blocked by preview environment:', e);
+            }
+        }
+
+        // 24 vollständige unregelmäßige Verben (Kindergerecht aufbereitet)
+        const verbs = [
+            { base: "be", past: "was/were", de: "sein", sentence: "He ___ happy." },
+            { base: "begin", past: "began", de: "beginnen", sentence: "The game ___ now." },
+            { base: "break", past: "broke", de: "brechen", sentence: "Do not ___ the toy." },
+            { base: "buy", past: "bought", de: "kaufen", sentence: "We ___ an ice cream." },
+            { base: "come", past: "came", de: "kommen", sentence: "Please ___ here." },
+            { base: "do", past: "did", de: "tun / machen", sentence: "I ___ my homework." },
+            { base: "drink", past: "drank", de: "trinken", sentence: "Cats ___ milk." },
+            { base: "eat", past: "ate", de: "essen", sentence: "Monkeys ___ bananas." },
+            { base: "find", past: "found", de: "finden", sentence: "I ___ my cat." },
+            { base: "fly", past: "flew", de: "fliegen", sentence: "Birds ___ high." },
+            { base: "get", past: "got", de: "bekommen", sentence: "You ___ a gift." },
+            { base: "give", past: "gave", de: "geben", sentence: "Dogs ___ paws." },
+            { base: "go", past: "went", de: "gehen", sentence: "We ___ to bed." },
+            { base: "have", past: "had", de: "haben", sentence: "I ___ a ball." },
+            { base: "know", past: "knew", de: "wissen", sentence: "I ___ the answer." },
+            { base: "make", past: "made", de: "machen", sentence: "They ___ music." },
+            { base: "run", past: "ran", de: "laufen", sentence: "Cheetahs ___ fast." },
+            { base: "see", past: "saw", de: "sehen", sentence: "I ___ a star." },
+            { base: "sing", past: "sang", de: "singend", sentence: "Birds ___ a song." },
+            { base: "speak", past: "spoke", de: "sprechen", sentence: "We ___ English." },
+            { base: "swim", past: "swam", de: "schwimmen", sentence: "Dolphins ___ well." },
+            { base: "take", past: "took", de: "nehmen", sentence: "Please ___ a book." },
+            { base: "think", past: "thought", de: "denken", sentence: "I ___ about it." },
+            { base: "write", past: "wrote", de: "schreiben", sentence: "I ___ my name." }
+        ];
+
+        let state = { xp: 0, tokens: 0 };
+
+        function addXP(xpEarned) {
+            let previousTokens = Math.floor(state.xp / 100);
+            state.xp += xpEarned;
+            let currentTokens = Math.floor(state.xp / 100);
+            
+            // Jedes Mal, wenn 100 XP erreicht werden, gibt es 1 Token
+            if (currentTokens > previousTokens) {
+                state.tokens += (currentTokens - previousTokens);
+            }
+            updateHUD();
+        }
+
+        function updateHUD() {
+            document.getElementById('xp-display').innerText = state.xp;
+            document.getElementById('token-display').innerText = state.tokens;
+        }
+
+        function returnToMenu() {
+            document.getElementById('menu-screen').classList.remove('hidden');
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('back-btn').classList.add('hidden');
+            if(window.currentGameInterval) clearInterval(window.currentGameInterval);
+        }
+
+        function startMode(mode) {
+            if (mode === 'runner') {
+                if (state.tokens < 1) {
+                    alert("Du brauchst mindestens 1 🪙 Token, um Springer Arcade zu spielen!\n\nLerne zuerst Vokabeln in den anderen Modi, um XP und Tokens zu sammeln!");
+                    return;
+                }
+                state.tokens--;
+                updateHUD();
+            }
+
+            document.getElementById('menu-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            document.getElementById('back-btn').classList.remove('hidden');
+
+            if (mode === 'match') initMatchGame();
+            else if (mode === 'detective') initDetectiveGame();
+            else if (mode === 'listening') initListeningGame();
+            else if (mode === 'runner') initRunnerGame();
+        }
+
+        // 1. TRIPLE MATCH (Einfachere Auswahl)
+        function initMatchGame() {
+            const container = document.getElementById('game-screen');
+            const verb = verbs[Math.floor(Math.random() * verbs.length)];
+            speakWord(verb.base);
+
+            container.innerHTML = `
+                <div class="text-center space-y-4 w-full">
+                    <h3 class="font-bold text-slate-700">Finde die Vergangenheit für: <span class="text-indigo-600 text-xl font-bold">${verb.base} (${verb.de})</span></h3>
+                    <button onclick="speakWord('${verb.base}')" class="bg-sky-100 text-sky-600 px-3 py-1 rounded-full text-sm font-bold">🔊 Anhören</button>
+                    <div class="grid grid-cols-2 gap-3 mt-4" id="options"></div>
+                </div>
+            `;
+
+            const optionsContainer = document.getElementById('options');
+            let choices = [verb.past];
+            while(choices.length < 4) {
+                let randomVerb = verbs[Math.floor(Math.random() * verbs.length)].past;
+                if(!choices.includes(randomVerb)) choices.push(randomVerb);
+            }
+            choices.sort(() => Math.random() - 0.5);
+
+            choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.className = "bg-white border-2 border-slate-200 p-4 rounded-2xl font-bold text-lg hover:border-indigo-500 arcade-btn";
+                btn.innerText = choice;
+                btn.onclick = () => {
+                    if(choice === verb.past) {
+                        addXP(10);
+                        initMatchGame();
+                    } else {
+                        btn.classList.add('bg-rose-50', 'border-rose-300');
+                    }
+                };
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        // 2. LÜCKEN-DETEKTIV
+        function initDetectiveGame() {
+            const container = document.getElementById('game-screen');
+            const verb = verbs[Math.floor(Math.random() * verbs.length)];
+            
+            container.innerHTML = `
+                <div class="text-center space-y-4 w-full">
+                    <h3 class="font-bold text-slate-700">Setze das richtige Wort ein (${verb.de}):</h3>
+                    <div class="text-xl font-bold text-indigo-600 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">${verb.sentence}</div>
+                    <div class="grid grid-cols-2 gap-3 mt-4" id="detective-options"></div>
+                </div>
+            `;
+
+            const optionsContainer = document.getElementById('detective-options');
+            let choices = [verb.past];
+            while(choices.length < 4) {
+                let randomVerb = verbs[Math.floor(Math.random() * verbs.length)].past;
+                if(!choices.includes(randomVerb)) choices.push(randomVerb);
+            }
+            choices.sort(() => Math.random() - 0.5);
+
+            choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.className = "bg-white border-2 border-slate-200 p-4 rounded-2xl font-bold text-lg hover:border-emerald-500 arcade-btn";
+                btn.innerText = choice;
+                btn.onclick = () => {
+                    if(choice === verb.past) {
+                        addXP(15);
+                        initDetectiveGame();
+                    } else {
+                        btn.classList.add('bg-rose-50', 'border-rose-300');
+                    }
+                };
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        // 3. HÖR-TRAINER
+        function initListeningGame() {
+            const container = document.getElementById('game-screen');
+            const verb = verbs[Math.floor(Math.random() * verbs.length)];
+            
+            container.innerHTML = `
+                <div class="text-center space-y-4 w-full">
+                    <h3 class="font-bold text-slate-700">Welches Wort hörst du?</h3>
+                    <button onclick="speakWord('${verb.past}')" class="bg-indigo-600 text-white p-6 rounded-full text-3xl shadow-lg mx-auto w-24 h-24 flex items-center justify-center arcade-btn">🔊</button>
+                    <div class="grid grid-cols-2 gap-3 mt-4" id="listening-options"></div>
+                </div>
+            `;
+            setTimeout(() => speakWord(verb.past), 300);
+
+            const optionsContainer = document.getElementById('listening-options');
+            let choices = [verb.past];
+            while(choices.length < 4) {
+                let r = verbs[Math.floor(Math.random() * verbs.length)].past;
+                if(!choices.includes(r)) choices.push(r);
+            }
+            choices.sort(() => Math.random() - 0.5);
+
+            choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.className = "bg-white border-2 border-slate-200 p-3 rounded-2xl font-bold text-base hover:border-sky-500 arcade-btn";
+                btn.innerText = choice;
+                btn.onclick = () => {
+                    if(choice === verb.past) {
+                        addXP(15);
+                        initListeningGame();
+                    } else {
+                        btn.classList.add('bg-rose-50', 'border-rose-300');
+                    }
+                };
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        // 4. SPRINGER ARCADE (Kosten: 1 Token, kein XP-Gewinn aus Score)
+        function initRunnerGame() {
+            const container = document.getElementById('game-screen');
+            container.innerHTML = `
+                <div class="text-center w-full">
+                    <canvas id="runnerCanvas" width="320" height="200" class="bg-slate-900 rounded-2xl shadow-inner mx-auto border-4 border-slate-800"></canvas>
+                    <p class="text-xs text-slate-400 mt-2">Tippe auf den Bildschirm oder Leertaste zum Springen!</p>
+                </div>
+            `;
+            const canvas = document.getElementById('runnerCanvas');
+            const ctx = canvas.getContext('2d');
+            let p = { x: 40, y: 140, w: 30, h: 30, vy: 0, gravity: 0.8, jump: -11, grounded: true };
+            let obstacles = [];
+            let score = 0;
+            let gameOver = false;
+
+            window.onkeydown = (e) => { if(e.code === 'Space') jumpAction(); };
+            canvas.onclick = jumpAction;
+
+            function jumpAction() {
+                if (p.grounded && !gameOver) { p.vy = p.jump; p.grounded = false; }
+                if (gameOver) startMode('runner'); // Startet neu, zieht erneut 1 Token ab
+            }
+
+            if(window.currentGameInterval) clearInterval(window.currentGameInterval);
+            window.currentGameInterval = setInterval(() => {
+                if (gameOver) return;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                p.vy += p.gravity;
+                p.y += p.vy;
+                if (p.y > 140) { p.y = 140; p.vy = 0; p.grounded = true; }
+
+                // Springer Figur
+                ctx.fillStyle = '#f8fafc';
+                ctx.font = '28px sans-serif';
+                ctx.fillText('♞', p.x, p.y + 24);
+
+                // Hindernisse
+                if (Math.random() < 0.02) obstacles.push({ x: 320, y: 145, w: 25, h: 25, type: ['♙','♖','♗'][Math.floor(Math.random()*3)] });
+
+                obstacles.forEach((obs) => {
+                    obs.x -= 4;
+                    ctx.fillText(obs.type, obs.x, obs.y + 22);
+                    if (p.x < obs.x + obs.w && p.x + p.w > obs.x && p.y < obs.y + obs.h && p.y + p.h > obs.y) {
+                        gameOver = true;
+                    }
+                });
+
+                obstacles = obstacles.filter(obs => obs.x > -40);
+                score++;
+                ctx.fillStyle = '#fff';
+                ctx.font = '14px Fredoka';
+                ctx.fillText("Score: " + score, 15, 25);
+
+                if(gameOver) {
+                    ctx.fillStyle = 'rgba(0,0,0,0.75)';
+                    ctx.fillRect(0,0,canvas.width,canvas.height);
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '16px Fredoka';
+                    ctx.fillText("Game Over!", 115, 80);
+                    ctx.fillText("Score: " + score, 120, 110);
+                    ctx.font = '12px Fredoka';
+                    ctx.fillStyle = '#cbd5e1';
+                    ctx.fillText("Tippen zum Neustart (Kosten: 1 🪙)", 60, 145);
+                }
+            }, 1000/60);
+        }
+
+        updateHUD();
+    </script>
+</body>
+</html>
