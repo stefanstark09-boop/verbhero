@@ -9,7 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
-        body { font-family: 'Fredoka', sans-serif; background-color: #f8fafc; color: #1e293b; user-select: none; }
+        body { font-family: 'Fredoka', sans-serif; background-color: #f8fafc; color: #1e293b; user-select: none; -webkit-user-select: none; }
         .arcade-btn { transition: all 0.1s ease; box-shadow: 0 4px 0 #cbd5e1; cursor: pointer; }
         .arcade-btn:active { transform: translateY(4px); box-shadow: 0 0 0 #cbd5e1; }
     </style>
@@ -59,7 +59,7 @@
             </button>
             <button onclick="openGamesMenu()" class="w-full bg-rose-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6 mt-2">
                 <span>🕹️ Games (Arcade)</span>
-                <span class="text-sm bg-rose-600 px-2 py-1 rounded-lg">1 🪙 Token</span>
+                <span class="text-sm bg-rose-600 px-2 py-1 rounded-lg">2 Spiele</span>
             </button>
         </div>
 
@@ -92,6 +92,10 @@
             <button onclick="startRunner()" class="w-full bg-rose-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
                 <span>♞ Springer Arcade</span>
                 <span class="text-sm bg-rose-600 px-2 py-1 rounded-lg">1 🪙</span>
+            </button>
+            <button onclick="startLander()" class="w-full bg-slate-800 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+                <span>🚀 Mondlander</span>
+                <span class="text-sm bg-slate-900 text-amber-400 px-2 py-1 rounded-lg">2 🪙</span>
             </button>
         </div>
 
@@ -282,6 +286,8 @@
             document.getElementById('back-btn').classList.add('hidden');
             document.getElementById('current-selection-label').innerText = "Hauptmenü";
             if(window.currentGameInterval) clearInterval(window.currentGameInterval);
+            window.onkeydown = null;
+            window.onkeyup = null;
         }
 
         function addXP(xpEarned) {
@@ -556,6 +562,7 @@
             });
         }
 
+        // SPIEL 1: SPRINGER ARCADE (1 Token)
         function startRunner() {
             if (state.tokens < 1) {
                 alert("Du brauchst mindestens 1 🪙 Token, um Springer Arcade zu spielen!\n\nLerne zuerst Vokabeln, um XP und Token zu sammeln!");
@@ -568,7 +575,7 @@
             document.getElementById('games-menu-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
             document.getElementById('back-btn').classList.remove('hidden');
-            document.getElementById('current-selection-label').innerText = "Springer Arcade 🪙";
+            document.getElementById('current-selection-label').innerText = "Springer Arcade (1 🪙)";
 
             initRunnerGame();
         }
@@ -584,7 +591,6 @@
             const canvas = document.getElementById('runnerCanvas');
             const ctx = canvas.getContext('2d');
             
-            // Spieler-Objekt mit Doppelsprung-Zähler (jumpCount)
             let p = { x: 40, y: 140, w: 30, h: 30, vy: 0, gravity: 0.55, jump: -9.0, jumpCount: 0, maxJumps: 2 };
             let obstacles = [];
             let score = 0;
@@ -599,7 +605,6 @@
                     startRunner();
                     return;
                 }
-                // Erlaubt Sprung am Boden oder einen zweiten Sprung in der Luft
                 if (p.jumpCount < p.maxJumps) {
                     p.vy = p.jump;
                     p.jumpCount++;
@@ -617,11 +622,10 @@
                 p.vy += p.gravity;
                 p.y += p.vy;
 
-                // Boden-Kollision
                 if (p.y > 140) {
                     p.y = 140;
                     p.vy = 0;
-                    p.jumpCount = 0; // Sprünge zurücksetzen, wenn man landetet
+                    p.jumpCount = 0;
                 }
 
                 ctx.fillStyle = '#f8fafc';
@@ -666,6 +670,227 @@
                     ctx.fillText("Tippen für Neustart (Kosten: 1 🪙)", 60, 160);
                 }
             }, 1000/60);
+        }
+
+        // SPIEL 2: MONDLANDER (2 Token)
+        function startLander() {
+            if (state.tokens < 2) {
+                alert("Du brauchst 2 🪙 Token für den Mondlander!\n\nLerne Vokabeln, um mehr XP und Token zu sammeln!");
+                return;
+            }
+            state.tokens -= 2;
+            updateHUD();
+
+            document.getElementById('main-select-screen').classList.add('hidden');
+            document.getElementById('games-menu-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            document.getElementById('back-btn').classList.remove('hidden');
+            document.getElementById('current-selection-label').innerText = "Mondlander (2 🪙)";
+
+            initLanderGame();
+        }
+
+        function initLanderGame() {
+            const container = document.getElementById('game-screen');
+            container.innerHTML = `
+                <div class="text-center w-full space-y-3">
+                    <canvas id="landerCanvas" width="320" height="230" class="bg-slate-950 rounded-2xl shadow-inner mx-auto border-4 border-slate-800"></canvas>
+                    
+                    <!-- Touch-Steuerung für das Smartphone -->
+                    <div class="grid grid-cols-3 gap-2 max-w-[320px] mx-auto">
+                        <button id="btn-left" class="bg-slate-700 active:bg-slate-600 text-white p-4 rounded-2xl font-bold text-xl shadow">⬅️</button>
+                        <button id="btn-thrust" class="bg-amber-500 active:bg-amber-400 text-slate-950 p-4 rounded-2xl font-bold text-xl shadow">🔥 Schub</button>
+                        <button id="btn-right" class="bg-slate-700 active:bg-slate-600 text-white p-4 rounded-2xl font-bold text-xl shadow">➡️</button>
+                    </div>
+                    <p class="text-xs text-slate-400">Lande langsam auf der grünen Plattform!</p>
+                </div>
+            `;
+
+            const canvas = document.getElementById('landerCanvas');
+            const ctx = canvas.getContext('2d');
+
+            let level = 1;
+            let totalScore = 0;
+            let highScore = localStorage.getItem('verbhero_lander_highscore') || 0;
+            
+            let ship = { x: 160, y: 30, vx: 0.4, vy: 0, angle: 0, fuel: 100 };
+            let pad = { x: 120, y: 210, w: 80 };
+            let keys = { left: false, right: false, thrust: false };
+            let status = 'playing'; // 'playing', 'landed', 'crashed'
+            let statusMessage = '';
+
+            // Touch & Maus Events für die Buttons
+            const setupHoldBtn = (id, keyName) => {
+                const el = document.getElementById(id);
+                el.onpointerdown = (e) => { e.preventDefault(); keys[keyName] = true; };
+                el.onpointerup = (e) => { e.preventDefault(); keys[keyName] = false; };
+                el.onpointerleave = () => { keys[keyName] = false; };
+            };
+            setupHoldBtn('btn-left', 'left');
+            setupHoldBtn('btn-right', 'right');
+            setupHoldBtn('btn-thrust', 'thrust');
+
+            // Tastatur-Unterstützung
+            window.onkeydown = (e) => {
+                if (e.code === 'ArrowLeft') keys.left = true;
+                if (e.code === 'ArrowRight') keys.right = true;
+                if (e.code === 'ArrowUp' || e.code === 'Space') keys.thrust = true;
+            };
+            window.onkeyup = (e) => {
+                if (e.code === 'ArrowLeft') keys.left = false;
+                if (e.code === 'ArrowRight') keys.right = false;
+                if (e.code === 'ArrowUp' || e.code === 'Space') keys.thrust = false;
+            };
+
+            canvas.onclick = () => {
+                if (status === 'landed') {
+                    level++;
+                    resetRound();
+                } else if (status === 'crashed') {
+                    startLander();
+                }
+            };
+
+            function resetRound() {
+                let padWidth = Math.max(40, 85 - (level - 1) * 10);
+                let padX = 20 + Math.random() * (canvas.width - padWidth - 40);
+                pad = { x: padX, y: 210, w: padWidth };
+                ship = {
+                    x: 40 + Math.random() * (canvas.width - 80),
+                    y: 30,
+                    vx: (Math.random() - 0.5) * 1.2,
+                    vy: 0,
+                    angle: 0,
+                    fuel: 100
+                };
+                status = 'playing';
+            }
+
+            resetRound();
+
+            // Sterne generieren
+            const stars = Array.from({ length: 25 }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * (canvas.height - 30)
+            }));
+
+            if (window.currentGameInterval) clearInterval(window.currentGameInterval);
+
+            window.currentGameInterval = setInterval(() => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Sterne zeichnen
+                ctx.fillStyle = '#94a3b8';
+                stars.forEach(s => ctx.fillRect(s.x, s.y, 1.5, 1.5));
+
+                // Mondboden
+                ctx.fillStyle = '#334155';
+                ctx.fillRect(0, 210, canvas.width, 20);
+
+                // Grüne Landeplattform
+                ctx.fillStyle = '#22c55e';
+                ctx.fillRect(pad.x, pad.y - 3, pad.w, 6);
+
+                if (status === 'playing') {
+                    // Mond-Schwerkraft (sanft für Kinder)
+                    ship.vy += 0.028;
+
+                    if (keys.left && ship.fuel > 0) {
+                        ship.vx -= 0.045;
+                        ship.fuel -= 0.25;
+                    }
+                    if (keys.right && ship.fuel > 0) {
+                        ship.vx += 0.045;
+                        ship.fuel -= 0.25;
+                    }
+                    if (keys.thrust && ship.fuel > 0) {
+                        ship.vy -= 0.075;
+                        ship.fuel -= 0.45;
+                    }
+                    if (ship.fuel < 0) ship.fuel = 0;
+
+                    ship.x += ship.vx;
+                    ship.y += ship.vy;
+
+                    // Bildschirmränder (Wrap-around)
+                    if (ship.x < 10) ship.x = canvas.width - 10;
+                    if (ship.x > canvas.width - 10) ship.x = 10;
+
+                    // Lande- bzw. Crash-Prüfung
+                    if (ship.y >= pad.y - 14) {
+                        const onPad = ship.x >= pad.x && ship.x <= pad.x + pad.w;
+                        const safeSpeed = ship.vy <= 1.8 && Math.abs(ship.vx) <= 1.2;
+
+                        if (onPad && safeSpeed) {
+                            status = 'landed';
+                            let roundPoints = Math.round(100 + ship.fuel * 2) * level;
+                            totalScore += roundPoints;
+                            if (totalScore > highScore) {
+                                highScore = totalScore;
+                                localStorage.setItem('verbhero_lander_highscore', highScore);
+                            }
+                            statusMessage = `Perfekt gelandet! +${roundPoints} Pkt`;
+                        } else {
+                            status = 'crashed';
+                            statusMessage = !onPad ? "Daneben gelandet!" : "Zu schnell aufgesetzt!";
+                        }
+                    }
+                }
+
+                // Rakete zeichnen
+                ctx.save();
+                ctx.translate(ship.x, ship.y);
+                ctx.font = '24px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(status === 'crashed' ? '💥' : '🚀', 0, 8);
+
+                // Schubflamme zeichnen
+                if (status === 'playing' && keys.thrust && ship.fuel > 0) {
+                    ctx.fillStyle = '#f59e0b';
+                    ctx.beginPath();
+                    ctx.moveTo(-4, 12);
+                    ctx.lineTo(4, 12);
+                    ctx.lineTo(0, 22 + Math.random() * 6);
+                    ctx.fill();
+                }
+                ctx.restore();
+
+                // HUD im Spiel
+                ctx.fillStyle = '#fff';
+                ctx.font = '12px Fredoka';
+                ctx.textAlign = 'left';
+                ctx.fillText(`Level ${level} • Score: ${totalScore}`, 10, 20);
+                ctx.fillText(`Highscore: ${highScore}`, 10, 36);
+
+                // Treibstoffbalken & Geschwindigkeitsanzeige
+                ctx.fillText(`Tank:`, 210, 20);
+                ctx.strokeStyle = '#64748b';
+                ctx.strokeRect(245, 10, 60, 10);
+                ctx.fillStyle = ship.fuel > 25 ? '#22c55e' : '#ef4444';
+                ctx.fillRect(246, 11, (ship.fuel / 100) * 58, 8);
+
+                // Geschwindigkeits-Warnung
+                ctx.fillStyle = ship.vy > 1.8 ? '#ef4444' : '#4ade80';
+                ctx.fillText(`Tempo: ${ship.vy.toFixed(1)}`, 210, 36);
+
+                // Overlay bei Landung oder Crash
+                if (status !== 'playing') {
+                    ctx.fillStyle = 'rgba(0,0,0,0.78)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.textAlign = 'center';
+                    ctx.fillStyle = status === 'landed' ? '#4ade80' : '#f87171';
+                    ctx.font = '18px Fredoka';
+                    ctx.fillText(statusMessage, canvas.width / 2, 95);
+                    
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '13px Fredoka';
+                    if (status === 'landed') {
+                        ctx.fillText("Tippe auf den Bildschirm für Level " + (level + 1), canvas.width / 2, 130);
+                    } else {
+                        ctx.fillText("Tippe auf den Bildschirm für Neustart (2 🪙)", canvas.width / 2, 130);
+                    }
+                }
+            }, 1000 / 60);
         }
 
         updateHUD();
