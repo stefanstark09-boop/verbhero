@@ -37,53 +37,71 @@
     <!-- MAIN CONTAINER -->
     <main id="app-container" class="flex-1 flex flex-col justify-center">
         
-        <!-- 1. HAUPTMENÜ -->
-        <div id="mode-select-screen" class="space-y-3">
-            <h2 class="text-center text-slate-600 font-bold mb-3">Wähle deinen Spielmodus!</h2>
+        <!-- 1. STARTSEITE: Hauptauswahl (Lernen oder Games) -->
+        <div id="main-select-screen" class="space-y-3">
+            <h2 class="text-center text-slate-600 font-bold mb-3">Was möchtest du machen?</h2>
             
-            <button onclick="openCategoryScreen('match')" class="w-full bg-indigo-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
-                <span>🧩 Triple Match</span>
-                <span class="text-sm bg-indigo-600 px-2 py-1 rounded-lg">3 Formen / Match</span>
-            </button>
-            <button onclick="openCategoryScreen('detective')" class="w-full bg-emerald-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
-                <span>🔍 Lücken-Detektiv</span>
-                <span class="text-sm bg-emerald-600 px-2 py-1 rounded-lg">Sätze</span>
-            </button>
-            <button onclick="openCategoryScreen('listening')" class="w-full bg-sky-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
-                <span>🎧 Hör-Trainer</span>
-                <span class="text-sm bg-sky-600 px-2 py-1 rounded-lg">Audio</span>
-            </button>
-            <button onclick="startRunner()" class="w-full bg-rose-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
-                <span>♞ Springer Arcade</span>
-                <span class="text-sm bg-rose-600 px-2 py-1 rounded-lg">1 🪙 Kosten</span>
-            </button>
-        </div>
-
-        <!-- 2. KATEGORIE-AUSWAHL -->
-        <div id="category-screen" class="hidden space-y-3">
-            <h2 class="text-center text-slate-600 font-bold mb-3">Was möchtest du üben?</h2>
-            
-            <button onclick="startLearning('verbs')" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+            <button onclick="selectCategory('verbs')" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
                 <span>⚡ Irregular Verbs</span>
-                <span class="text-sm bg-indigo-700 px-2 py-1 rounded-lg">24 Verben (3 Formen)</span>
+                <span class="text-sm bg-indigo-700 px-2 py-1 rounded-lg">82 Verben</span>
             </button>
-            <button onclick="startLearning('unit1')" class="w-full bg-teal-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+            <button onclick="selectCategory('unit1')" class="w-full bg-teal-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
                 <span>📚 Vokabeln: Unit 1</span>
                 <span class="text-sm bg-teal-600 px-2 py-1 rounded-lg">Schule & Alltag</span>
             </button>
-            <button onclick="startLearning('unit2')" class="w-full bg-cyan-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+            <button onclick="selectCategory('unit2')" class="w-full bg-cyan-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
                 <span>📚 Vokabeln: Unit 2</span>
                 <span class="text-sm bg-cyan-600 px-2 py-1 rounded-lg">Hobby & Freizeit</span>
             </button>
+            <button onclick="selectCategory('mixed')" class="w-full bg-amber-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+                <span>🔀 Gemischt</span>
+                <span class="text-sm bg-amber-600 px-2 py-1 rounded-lg">Alles durcheinander</span>
+            </button>
+            <button onclick="openGamesMenu()" class="w-full bg-rose-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6 mt-2">
+                <span>🕹️ Games (Arcade)</span>
+                <span class="text-sm bg-rose-600 px-2 py-1 rounded-lg">1 🪙 Token</span>
+            </button>
         </div>
 
-        <!-- 3. SPIELBEREICH -->
+        <!-- 2. SPIELMODUS-AUSWAHL: Nach der Kategoriewahl -->
+        <div id="game-select-screen" class="hidden space-y-3">
+            <h2 class="text-center text-slate-600 font-bold mb-3">Wähle deinen Übungsmodus!</h2>
+            
+            <button onclick="startLearningGame('match')" class="w-full bg-indigo-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+                <span>🧩 Triple Match</span>
+                <span class="text-sm bg-indigo-600 px-2 py-1 rounded-lg">Match</span>
+            </button>
+            <button id="matrix-mode-btn" onclick="startLearningGame('matrix')" class="w-full bg-violet-600 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+                <span>🔢 3x3 Matrix</span>
+                <span class="text-sm bg-violet-700 px-2 py-1 rounded-lg">3er-Trios finden</span>
+            </button>
+            <button onclick="startLearningGame('detective')" class="w-full bg-emerald-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+                <span>🔍 Lücken-Detektiv</span>
+                <span class="text-sm bg-emerald-600 px-2 py-1 rounded-lg">Sätze</span>
+            </button>
+            <button onclick="startLearningGame('listening')" class="w-full bg-sky-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+                <span>🎧 Hör-Trainer</span>
+                <span class="text-sm bg-sky-600 px-2 py-1 rounded-lg">Audio</span>
+            </button>
+        </div>
+
+        <!-- 3. GAMES-MENÜ: Liste der Arcade-Spiele -->
+        <div id="games-menu-screen" class="hidden space-y-3">
+            <h2 class="text-center text-slate-600 font-bold mb-3">Arcade-Spiele</h2>
+            
+            <button onclick="startRunner()" class="w-full bg-rose-500 text-white p-4 rounded-2xl font-bold text-lg arcade-btn flex items-center justify-between px-6">
+                <span>♞ Springer Arcade</span>
+                <span class="text-sm bg-rose-600 px-2 py-1 rounded-lg">1 🪙</span>
+            </button>
+        </div>
+
+        <!-- 4. SPIELBEREICH -->
         <div id="game-screen" class="hidden flex flex-col items-center justify-center"></div>
     </main>
 
     <!-- FOOTER NAVIGATION -->
     <footer class="mt-4 flex justify-between items-center px-2">
-        <button onclick="returnToMain()" id="back-btn" class="text-sm bg-slate-200 text-slate-700 px-3 py-2 rounded-xl font-bold hidden">⬅️ Hauptmenü</button>
+        <button onclick="returnToMain()" id="back-btn" class="text-sm bg-slate-200 text-slate-700 px-3 py-2 rounded-xl font-bold hidden">⬅️ Zurück</button>
         <p class="text-xs text-slate-400 ml-auto">VerbHero PWA</p>
     </footer>
 
@@ -110,90 +128,90 @@
 
         const wordPools = {
             verbs: [
-					{ base: "be", past: "was/were", pp: "been", de: "sein", sentence: "They ___ happy to see us." },
-					{ base: "become", past: "became", pp: "become", de: "werden", sentence: "She ___ a doctor after years of study." },
-					{ base: "begin", past: "began", pp: "begun", de: "beginnen", sentence: "The movie ___ at eight o'clock." },
-					{ base: "bend", past: "bent", pp: "bent", de: "beugen; biegen", sentence: "He ___ the wire to make a hook." },
-					{ base: "break", past: "broke", pp: "broken", de: "brechen", sentence: "Careful, don't ___ that glass!" },
-					{ base: "bring", past: "brought", pp: "brought", de: "bringen", sentence: "Please ___ your books to class." },
-					{ base: "build", past: "built", pp: "built", de: "bauen", sentence: "They ___ a new house near the lake." },
-					{ base: "burn", past: "burnt", pp: "burnt", de: "verbrennen", sentence: "The fire ___ all night long." },
-					{ base: "buy", past: "bought", pp: "bought", de: "kaufen", sentence: "I want to ___ a new bicycle." },
-					{ base: "can", past: "could", pp: "been able to", de: "können", sentence: "She ___ play the piano when she was five." },
-					{ base: "catch", past: "caught", pp: "caught", de: "fangen", sentence: "Can you ___ the ball?" },
-					{ base: "choose", past: "chose", pp: "chosen", de: "(aus-)wählen", sentence: "You need to ___ your favorite flavor." },
-					{ base: "come", past: "came", pp: "come", de: "kommen", sentence: "They ___ home late last night." },
-					{ base: "cost", past: "cost", pp: "cost", de: "kosten", sentence: "How much does this jacket ___?" },
-					{ base: "cut", past: "cut", pp: "cut", de: "schneiden", sentence: "He ___ the paper with scissors." },
-					{ base: "do", past: "did", pp: "done", de: "tun, machen", sentence: "Have you ___ your homework yet?" },
-					{ base: "draw", past: "drew", pp: "drawn", de: "zeichnen", sentence: "She likes to ___ landscapes." },
-					{ base: "dream", past: "dreamt", pp: "dreamt", de: "träumen", sentence: "Last night I ___ about flying." },
-					{ base: "drink", past: "drank", pp: "drunk", de: "trinken", sentence: "You should ___ more water." },
-					{ base: "drive", past: "drove", pp: "driven", de: "fahren; treiben", sentence: "He ___ to work every morning." },
-					{ base: "eat", past: "ate", pp: "eaten", de: "essen", sentence: "We ___ lunch at noon." },
-					{ base: "fall", past: "fell", pp: "fallen", de: "fallen (einschlafen)", sentence: "Leaves ___ from the trees in autumn." },
-					{ base: "feel", past: "felt", pp: "felt", de: "fühlen", sentence: "I ___ much better today." },
-					{ base: "fight", past: "fought", pp: "fought", de: "kämpfen; streiten", sentence: "The two cats ___ over the food." },
-					{ base: "find", past: "found", pp: "found", de: "finden", sentence: "Did you ___ your missing key?" },
-					{ base: "fly", past: "flew", pp: "flown", de: "fliegen", sentence: "Birds ___ south for the winter." },
-					{ base: "forget", past: "forgot", pp: "forgotten", de: "vergessen", sentence: "Don't ___ to close the window." },
-					{ base: "freeze", past: "froze", pp: "frozen", de: "einfrieren; erstarren", sentence: "Water will ___ at zero degrees Celsius." },
-					{ base: "get", past: "got", pp: "got", de: "bekommen; werden", sentence: "I ___ a nice present for my birthday." },
-					{ base: "get up", past: "got up", pp: "got up", de: "aufstehen", sentence: "What time do you usually ___?" },
-					{ base: "give", past: "gave", pp: "given", de: "geben", sentence: "Please ___ me your hand." },
-					{ base: "go", past: "went", pp: "gone", de: "gehen; fahren", sentence: "We ___ to the cinema yesterday." },
-					{ base: "grow", past: "grew", pp: "grown", de: "wachsen", sentence: "Plants ___ faster in the sunlight." },
-					{ base: "hang", past: "hung", pp: "hung", de: "hängen", sentence: "Please ___ your coat on the hook." },
-					{ base: "have", past: "had", pp: "had", de: "haben", sentence: "They ___ a great time at the party." },
-					{ base: "hear", past: "heard", pp: "heard", de: "hören", sentence: "Did you ___ that strange noise?" },
-					{ base: "hide", past: "hid", pp: "hidden", de: "(sich) verstecken", sentence: "The dog likes to ___ under the bed." },
-					{ base: "hit", past: "hit", pp: "hit", de: "schlagen", sentence: "He ___ the ball with the bat." },
-					{ base: "hold", past: "held", pp: "held", de: "(fest-)halten", sentence: "Please ___ the door open for me." },
-					{ base: "hurt", past: "hurt", pp: "hurt", de: "(sich) verletzen; schmerzen", sentence: "My knee started to ___ after running." },
-					{ base: "know", past: "knew", pp: "known", de: "wissen; kennen", sentence: "Do you ___ the answer to this question?" },
-					{ base: "lay", past: "laid", pp: "laid", de: "legen (etwas)", sentence: "She ___ the book on the table." },
-					{ base: "learn", past: "learnt", pp: "learnt", de: "lernen", sentence: "We ___ many new English words." },
-					{ base: "leave", past: "left", pp: "left", de: "verlassen", sentence: "The train will ___ in ten minutes." },
-					{ base: "let", past: "let", pp: "let", de: "lassen", sentence: "Please ___ me help you with that." },
-					{ base: "lie", past: "lay", pp: "lain", de: "bleiben; liegen", sentence: "He likes to ___ on the grass in summer." },
-					{ base: "lose", past: "lost", pp: "lost", de: "verlieren", sentence: "Be careful not to ___ your ticket." },
-					{ base: "make", past: "made", pp: "made", de: "machen", sentence: "She can ___ delicious chocolate cakes." },
-					{ base: "mean", past: "meant", pp: "meant", de: "meinen", sentence: "What does this English word ___?" },
-					{ base: "meet", past: "met", pp: "met", de: "treffen", sentence: "Let's ___ outside the school." },
-					{ base: "misunderstand", past: "misunderstood", pp: "misunderstood", de: "missverstehen", sentence: "I hope you did not ___ my explanation." },
-					{ base: "pay", past: "paid", pp: "paid", de: "(be-)zahlen", sentence: "You can ___ by card or in cash." },
-					{ base: "put", past: "put", pp: "put", de: "stellen; legen; setzen", sentence: "Where did you ___ the keys?" },
-					{ base: "read", past: "read", pp: "read", de: "lesen", sentence: "I ___ an interesting article yesterday." },
-					{ base: "ride", past: "rode", pp: "ridden", de: "reiten; fahren", sentence: "She learned to ___ a horse last summer." },
-					{ base: "ring", past: "rang", pp: "rung", de: "läuten", sentence: "Did the school bell just ___?" },
-					{ base: "rise", past: "rose", pp: "risen", de: "steigen", sentence: "The sun will ___ early tomorrow morning." },
-					{ base: "run", past: "ran", pp: "run", de: "laufen; rennen", sentence: "He ___ very fast in every race." },
-					{ base: "say", past: "said", pp: "said", de: "sagen", sentence: "What did he ___ to you?" },
-					{ base: "see", past: "saw", pp: "seen", de: "sehen", sentence: "Did you ___ the bright shooting star?" },
-					{ base: "sell", past: "sold", pp: "sold", de: "verkaufen", sentence: "They want to ___ their old car." },
-					{ base: "send", past: "sent", pp: "sent", de: "senden; schicken", sentence: "Please ___ me an email later." },
-					{ base: "shine", past: "shone", pp: "shone", de: "leuchten; scheinen", sentence: "The stars ___ brightly in the night sky." },
-					{ base: "shoot", past: "shot", pp: "shot", de: "schießen", sentence: "He tried to ___ a goal in the game." },
-					{ base: "show", past: "showed", pp: "shown", de: "zeigen", sentence: "Can you ___ me how this works?" },
-					{ base: "sing", past: "sang", pp: "sung", de: "singen", sentence: "They like to ___ songs together." },
-					{ base: "sit", past: "sat", pp: "sat", de: "sitzen; sich setzen", sentence: "Please ___ down on the chair." },
-					{ base: "sleep", past: "slept", pp: "slept", de: "schlafen", sentence: "Babies ___ for many hours every day." },
-					{ base: "smell", past: "smelt", pp: "smelt", de: "riechen", sentence: "The fresh flowers ___ so nice." },
-					{ base: "speak", past: "spoke", pp: "spoken", de: "sprechen", sentence: "Does anyone here ___ German?" },
-					{ base: "spend", past: "spent", pp: "spent", de: "verbringen; ausgeben", sentence: "We ___ three weeks in Spain." },
-					{ base: "stand", past: "stood", pp: "stood", de: "stehen", sentence: "Everyone had to ___ up when the teacher entered." },
-					{ base: "steal", past: "stole", pp: "stolen", de: "stehlen", sentence: "It is wrong to ___ money from others." },
-					{ base: "swim", past: "swam", pp: "swum", de: "schwimmen", sentence: "Can you ___ across the lake?" },
-					{ base: "take", past: "took", pp: "taken", de: "nehmen; bringen", sentence: "Don't forget to ___ an umbrella with you." },
-					{ base: "teach", past: "taught", pp: "taught", de: "lehren; unterrichten", sentence: "She will ___ us English history." },
-					{ base: "tell", past: "told", pp: "told", de: "sagen; erzählen", sentence: "Can you ___ me a bedtime story?" },
-					{ base: "think", past: "thought", pp: "thought", de: "denken", sentence: "What do you ___ about this idea?" },
-					{ base: "throw", past: "threw", pp: "thrown", de: "werfen", sentence: "He will ___ the ball to his friend." },
-					{ base: "understand", past: "understood", pp: "understood", de: "verstehen", sentence: "I do not ___ this mathematical formula." },
-					{ base: "wake", past: "woke", pp: "woken", de: "wecken; (auf-)wachen", sentence: "Please ___ me up at seven o'clock." },
-					{ base: "wear", past: "wore", pp: "worn", de: "tragen (Kleidung)", sentence: "You should ___ a warm jacket outside." },
-					{ base: "win", past: "won", pp: "won", de: "gewinnen", sentence: "Our team hopes to ___ the tournament." },
-					{ base: "write", past: "wrote", pp: "written", de: "schreiben", sentence: "I need to ___ an essay for school." }
+				{ base: "be", past: "was/were", pp: "been", de: "sein", sentence: "They ___ happy to see us." },
+				{ base: "become", past: "became", pp: "become", de: "werden", sentence: "She ___ a doctor after years of study." },
+				{ base: "begin", past: "began", pp: "begun", de: "beginnen", sentence: "The movie ___ at eight o'clock." },
+				{ base: "bend", past: "bent", pp: "bent", de: "beugen; biegen", sentence: "He ___ the wire to make a hook." },
+				{ base: "break", past: "broke", pp: "broken", de: "brechen", sentence: "Careful, don't ___ that glass!" },
+				{ base: "bring", past: "brought", pp: "brought", de: "bringen", sentence: "Please ___ your books to class." },
+				{ base: "build", past: "built", pp: "built", de: "bauen", sentence: "They ___ a new house near the lake." },
+				{ base: "burn", past: "burnt", pp: "burnt", de: "verbrennen", sentence: "The fire ___ all night long." },
+				{ base: "buy", past: "bought", pp: "bought", de: "kaufen", sentence: "I want to ___ a new bicycle." },
+				{ base: "can", past: "could", pp: "been able to", de: "können", sentence: "She ___ play the piano when she was five." },
+				{ base: "catch", past: "caught", pp: "caught", de: "fangen", sentence: "Can you ___ the ball?" },
+				{ base: "choose", past: "chose", pp: "chosen", de: "(aus-)wählen", sentence: "You need to ___ your favorite flavor." },
+				{ base: "come", past: "came", pp: "come", de: "kommen", sentence: "They ___ home late last night." },
+				{ base: "cost", past: "cost", pp: "cost", de: "kosten", sentence: "How much does this jacket ___?" },
+				{ base: "cut", past: "cut", pp: "cut", de: "schneiden", sentence: "He ___ the paper with scissors." },
+				{ base: "do", past: "did", pp: "done", de: "tun, machen", sentence: "Have you ___ your homework yet?" },
+				{ base: "draw", past: "drew", pp: "drawn", de: "zeichnen", sentence: "She likes to ___ landscapes." },
+				{ base: "dream", past: "dreamt", pp: "dreamt", de: "träumen", sentence: "Last night I ___ about flying." },
+				{ base: "drink", past: "drank", pp: "drunk", de: "trinken", sentence: "You should ___ more water." },
+				{ base: "drive", past: "drove", pp: "driven", de: "fahren; treiben", sentence: "He ___ to work every morning." },
+				{ base: "eat", past: "ate", pp: "eaten", de: "essen", sentence: "We ___ lunch at noon." },
+				{ base: "fall", past: "fell", pp: "fallen", de: "fallen (einschlafen)", sentence: "Leaves ___ from the trees in autumn." },
+				{ base: "feel", past: "felt", pp: "felt", de: "fühlen", sentence: "I ___ much better today." },
+				{ base: "fight", past: "fought", pp: "fought", de: "kämpfen; streiten", sentence: "The two cats ___ over the food." },
+				{ base: "find", past: "found", pp: "found", de: "finden", sentence: "Did you ___ your missing key?" },
+				{ base: "fly", past: "flew", pp: "flown", de: "fliegen", sentence: "Birds ___ south for the winter." },
+				{ base: "forget", past: "forgot", pp: "forgotten", de: "vergessen", sentence: "Don't ___ to close the window." },
+				{ base: "freeze", past: "froze", pp: "frozen", de: "einfrieren; erstarren", sentence: "Water will ___ at zero degrees Celsius." },
+				{ base: "get", past: "got", pp: "got", de: "bekommen; werden", sentence: "I ___ a nice present for my birthday." },
+				{ base: "get up", past: "got up", pp: "got up", de: "aufstehen", sentence: "What time do you usually ___?" },
+				{ base: "give", past: "gave", pp: "given", de: "geben", sentence: "Please ___ me your hand." },
+				{ base: "go", past: "went", pp: "gone", de: "gehen; fahren", sentence: "We ___ to the cinema yesterday." },
+				{ base: "grow", past: "grew", pp: "grown", de: "wachsen", sentence: "Plants ___ faster in the sunlight." },
+				{ base: "hang", past: "hung", pp: "hung", de: "hängen", sentence: "Please ___ your coat on the hook." },
+				{ base: "have", past: "had", pp: "had", de: "haben", sentence: "They ___ a great time at the party." },
+				{ base: "hear", past: "heard", pp: "heard", de: "hören", sentence: "Did you ___ that strange noise?" },
+				{ base: "hide", past: "hid", pp: "hidden", de: "(sich) verstecken", sentence: "The dog likes to ___ under the bed." },
+				{ base: "hit", past: "hit", pp: "hit", de: "schlagen", sentence: "He ___ the ball with the bat." },
+				{ base: "hold", past: "held", pp: "held", de: "(fest-)halten", sentence: "Please ___ the door open for me." },
+				{ base: "hurt", past: "hurt", pp: "hurt", de: "(sich) verletzen; schmerzen", sentence: "My knee started to ___ after running." },
+				{ base: "know", past: "knew", pp: "known", de: "wissen; kennen", sentence: "Do you ___ the answer to this question?" },
+				{ base: "lay", past: "laid", pp: "laid", de: "legen (etwas)", sentence: "She ___ the book on the table." },
+				{ base: "learn", past: "learnt", pp: "learnt", de: "lernen", sentence: "We ___ many new English words." },
+				{ base: "leave", past: "left", pp: "left", de: "verlassen", sentence: "The train will ___ in ten minutes." },
+				{ base: "let", past: "let", pp: "let", de: "lassen", sentence: "Please ___ me help you with that." },
+				{ base: "lie", past: "lay", pp: "lain", de: "bleiben; liegen", sentence: "He likes to ___ on the grass in summer." },
+				{ base: "lose", past: "lost", pp: "lost", de: "verlieren", sentence: "Be careful not to ___ your ticket." },
+				{ base: "make", past: "made", pp: "made", de: "machen", sentence: "She can ___ delicious chocolate cakes." },
+				{ base: "mean", past: "meant", pp: "meant", de: "meinen", sentence: "What does this English word ___?" },
+				{ base: "meet", past: "met", pp: "met", de: "treffen", sentence: "Let's ___ outside the school." },
+				{ base: "misunderstand", past: "misunderstood", pp: "misunderstood", de: "missverstehen", sentence: "I hope you did not ___ my explanation." },
+				{ base: "pay", past: "paid", pp: "paid", de: "(be-)zahlen", sentence: "You can ___ by card or in cash." },
+				{ base: "put", past: "put", pp: "put", de: "stellen; legen; setzen", sentence: "Where did you ___ the keys?" },
+				{ base: "read", past: "read", pp: "read", de: "lesen", sentence: "I ___ an interesting article yesterday." },
+				{ base: "ride", past: "rode", pp: "ridden", de: "reiten; fahren", sentence: "She learned to ___ a horse last summer." },
+				{ base: "ring", past: "rang", pp: "rung", de: "läuten", sentence: "Did the school bell just ___?" },
+				{ base: "rise", past: "rose", pp: "risen", de: "steigen", sentence: "The sun will ___ early tomorrow morning." },
+				{ base: "run", past: "ran", pp: "run", de: "laufen; rennen", sentence: "He ___ very fast in every race." },
+				{ base: "say", past: "said", pp: "said", de: "sagen", sentence: "What did he ___ to you?" },
+				{ base: "see", past: "saw", pp: "seen", de: "sehen", sentence: "Did you ___ the bright shooting star?" },
+				{ base: "sell", past: "sold", pp: "sold", de: "verkaufen", sentence: "They want to ___ their old car." },
+				{ base: "send", past: "sent", pp: "sent", de: "senden; schicken", sentence: "Please ___ me an email later." },
+				{ base: "shine", past: "shone", pp: "shone", de: "leuchten; scheinen", sentence: "The stars ___ brightly in the night sky." },
+				{ base: "shoot", past: "shot", pp: "shot", de: "schießen", sentence: "He tried to ___ a goal in the game." },
+				{ base: "show", past: "showed", pp: "shown", de: "zeigen", sentence: "Can you ___ me how this works?" },
+				{ base: "sing", past: "sang", pp: "sung", de: "singen", sentence: "They like to ___ songs together." },
+				{ base: "sit", past: "sat", pp: "sat", de: "sitzen; sich setzen", sentence: "Please ___ down on the chair." },
+				{ base: "sleep", past: "slept", pp: "slept", de: "schlafen", sentence: "Babies ___ for many hours every day." },
+				{ base: "smell", past: "smelt", pp: "smelt", de: "riechen", sentence: "The fresh flowers ___ so nice." },
+				{ base: "speak", past: "spoke", pp: "spoken", de: "sprechen", sentence: "Does anyone here ___ German?" },
+				{ base: "spend", past: "spent", pp: "spent", de: "verbringen; ausgeben", sentence: "We ___ three weeks in Spain." },
+				{ base: "stand", past: "stood", pp: "stood", de: "stehen", sentence: "Everyone had to ___ up when the teacher entered." },
+				{ base: "steal", past: "stole", pp: "stolen", de: "stehlen", sentence: "It is wrong to ___ money from others." },
+				{ base: "swim", past: "swam", pp: "swum", de: "schwimmen", sentence: "Can you ___ across the lake?" },
+				{ base: "take", past: "took", pp: "taken", de: "nehmen; bringen", sentence: "Don't forget to ___ an umbrella with you." },
+				{ base: "teach", past: "taught", pp: "taught", de: "lehren; unterrichten", sentence: "She will ___ us English history." },
+				{ base: "tell", past: "told", pp: "told", de: "sagen; erzählen", sentence: "Can you ___ me a bedtime story?" },
+				{ base: "think", past: "thought", pp: "thought", de: "denken", sentence: "What do you ___ about this idea?" },
+				{ base: "throw", past: "threw", pp: "thrown", de: "werfen", sentence: "He will ___ the ball to his friend." },
+				{ base: "understand", past: "understood", pp: "understood", de: "verstehen", sentence: "I do not ___ this mathematical formula." },
+				{ base: "wake", past: "woke", pp: "woken", de: "wecken; (auf-)wachen", sentence: "Please ___ me up at seven o'clock." },
+				{ base: "wear", past: "wore", pp: "worn", de: "tragen (Kleidung)", sentence: "You should ___ a warm jacket outside." },
+				{ base: "win", past: "won", pp: "won", de: "gewinnen", sentence: "Our team hopes to ___ the tournament." },
+				{ base: "write", past: "wrote", pp: "written", de: "schreiben", sentence: "I need to ___ an essay for school." }
             ],
             unit1: [
                 { base: "schoolbag", target: "schoolbag", de: "Schultasche", sentence: "I put books in my ___." },
@@ -210,36 +228,57 @@
             ]
         };
 
-        let selectedGame = 'match';
         let currentCategory = 'verbs';
         let currentItems = wordPools.verbs;
+        let selectedGame = 'match';
         let state = { xp: 0, tokens: 0 };
 
-        function openCategoryScreen(gameMode) {
-            selectedGame = gameMode;
-            document.getElementById('mode-select-screen').classList.add('hidden');
-            document.getElementById('category-screen').classList.remove('hidden');
+        function selectCategory(categoryKey) {
+            currentCategory = categoryKey;
+            if (categoryKey === 'mixed') {
+                currentItems = [...wordPools.verbs, ...wordPools.unit1, ...wordPools.unit2];
+            } else {
+                currentItems = wordPools[categoryKey];
+            }
+
+            // 3x3 Matrix nur bei Irregular Verbs anzeigen
+            const matrixBtn = document.getElementById('matrix-mode-btn');
+            if (categoryKey === 'verbs') {
+                matrixBtn.classList.remove('hidden');
+            } else {
+                matrixBtn.classList.add('hidden');
+            }
+
+            let catName = categoryKey === 'verbs' ? 'Irregular Verbs' : categoryKey === 'mixed' ? 'Gemischt' : categoryKey.toUpperCase();
+            document.getElementById('current-selection-label').innerText = catName;
+
+            document.getElementById('main-select-screen').classList.add('hidden');
+            document.getElementById('game-select-screen').classList.remove('hidden');
             document.getElementById('back-btn').classList.remove('hidden');
-            document.getElementById('current-selection-label').innerText = "Modus wählen";
         }
 
-        function startLearning(categoryKey) {
-            currentCategory = categoryKey;
-            currentItems = wordPools[categoryKey];
-            let catName = categoryKey === 'verbs' ? 'Irregular Verbs' : categoryKey.toUpperCase();
-            document.getElementById('current-selection-label').innerText = catName + " (" + selectedGame.toUpperCase() + ")";
-            
-            document.getElementById('category-screen').classList.add('hidden');
+        function openGamesMenu() {
+            document.getElementById('main-select-screen').classList.add('hidden');
+            document.getElementById('games-menu-screen').classList.remove('hidden');
+            document.getElementById('back-btn').classList.remove('hidden');
+            document.getElementById('current-selection-label').innerText = "Arcade Games";
+        }
+
+        function startLearningGame(gameMode) {
+            selectedGame = gameMode;
+            document.getElementById('game-select-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
 
             if (selectedGame === 'match') initMatchGame();
+            else if (selectedGame === 'matrix') initMatrixGame();
             else if (selectedGame === 'detective') initDetectiveGame();
             else if (selectedGame === 'listening') initListeningGame();
         }
 
         function returnToMain() {
-            document.getElementById('mode-select-screen').classList.remove('hidden');
-            document.getElementById('category-screen').classList.add('hidden');
+            document.getElementById('main-select-screen').classList.remove('hidden');
+            document.getElementById('game-select-screen').classList.add('hidden');
+            document.getElementById('games-menu-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.add('hidden');
             document.getElementById('back-btn').classList.add('hidden');
             document.getElementById('current-selection-label').innerText = "Hauptmenü";
@@ -261,19 +300,132 @@
             document.getElementById('token-display').innerText = state.tokens;
         }
 
+        // NEUES SPIEL: 3x3 MATRIX für Irregular Verbs
+        function initMatrixGame() {
+            const container = document.getElementById('game-screen');
+            
+            // 3 verschiedene, zufällige Verben auswählen (mit eindeutigen Wortformen, damit keine Verwechslung entsteht)
+            let chosenVerbs = [];
+            let usedWords = new Set();
+            let shuffledPool = [...wordPools.verbs].sort(() => Math.random() - 0.5);
+
+            for (let v of shuffledPool) {
+                if (chosenVerbs.length >= 3) break;
+                let forms = [v.base, v.past, v.pp];
+                // Sicherstellen, dass keine identischen Formen zwischen verschiedenen Verben kollidieren
+                if (!forms.some(f => usedWords.has(f))) {
+                    chosenVerbs.push(v);
+                    forms.forEach(f => usedWords.add(f));
+                }
+            }
+
+            // 9 Kacheln erstellen (3 Verben * 3 Formen)
+            let tiles = [];
+            chosenVerbs.forEach((verb, verbIndex) => {
+                tiles.push({ text: verb.base, groupId: verbIndex, solved: false });
+                tiles.push({ text: verb.past, groupId: verbIndex, solved: false });
+                tiles.push({ text: verb.pp, groupId: verbIndex, solved: false });
+            });
+
+            // Kacheln mischen
+            tiles.sort(() => Math.random() - 0.5);
+
+            let selectedIndices = [];
+            let solvedGroups = 0;
+            let isChecking = false;
+
+            function renderMatrix() {
+                container.innerHTML = `
+                    <div class="text-center space-y-3 w-full">
+                        <h3 class="font-bold text-slate-700">Finde die 3 zusammengehörigen Verb-Trios!</h3>
+                        <p class="text-xs text-slate-400">Tippe jeweils 3 Formen eines Verbs an (${solvedGroups}/3 gelöst)</p>
+                        <div class="grid grid-cols-3 gap-2.5 mt-3" id="matrix-grid"></div>
+                    </div>
+                `;
+
+                const grid = document.getElementById('matrix-grid');
+
+                tiles.forEach((tile, idx) => {
+                    const btn = document.createElement('button');
+                    let baseClasses = "h-20 rounded-2xl font-bold text-sm px-1 flex items-center justify-center text-center transition-all border-2 ";
+
+                    if (tile.solved) {
+                        btn.className = baseClasses + "bg-emerald-100 border-emerald-400 text-emerald-800 opacity-75 cursor-default";
+                    } else if (selectedIndices.includes(idx)) {
+                        btn.className = baseClasses + "bg-indigo-600 border-indigo-700 text-white scale-95 shadow-inner";
+                    } else {
+                        btn.className = baseClasses + "bg-white border-slate-200 text-slate-700 hover:border-indigo-400 arcade-btn";
+                    }
+
+                    btn.innerText = tile.text;
+
+                    btn.onclick = () => {
+                        if (tile.solved || isChecking) return;
+
+                        // Bereits ausgewählte Kachel wieder abwählen
+                        if (selectedIndices.includes(idx)) {
+                            selectedIndices = selectedIndices.filter(i => i !== idx);
+                            renderMatrix();
+                            return;
+                        }
+
+                        selectedIndices.push(idx);
+                        renderMatrix();
+
+                        // Sobald 3 Kacheln gewählt wurden, prüfen
+                        if (selectedIndices.length === 3) {
+                            isChecking = true;
+                            const firstGroup = tiles[selectedIndices[0]].groupId;
+                            const allMatch = selectedIndices.every(i => tiles[i].groupId === firstGroup);
+
+                            if (allMatch) {
+                                setTimeout(() => {
+                                    selectedIndices.forEach(i => tiles[i].solved = true);
+                                    selectedIndices = [];
+                                    solvedGroups++;
+                                    isChecking = false;
+
+                                    if (solvedGroups === 3) {
+                                        addXP(25);
+                                        setTimeout(() => initMatrixGame(), 500);
+                                    } else {
+                                        renderMatrix();
+                                    }
+                                }, 300);
+                            } else {
+                                // Kurz rot markieren bei falscher Kombination
+                                const buttons = grid.querySelectorAll('button');
+                                selectedIndices.forEach(i => {
+                                    buttons[i].classList.remove('bg-indigo-600', 'border-indigo-700');
+                                    buttons[i].classList.add('bg-rose-500', 'border-rose-600');
+                                });
+
+                                setTimeout(() => {
+                                    selectedIndices = [];
+                                    isChecking = false;
+                                    renderMatrix();
+                                }, 600);
+                            }
+                        }
+                    };
+
+                    grid.appendChild(btn);
+                });
+            }
+
+            renderMatrix();
+        }
+
         function initMatchGame() {
             const container = document.getElementById('game-screen');
             const item = currentItems[Math.floor(Math.random() * currentItems.length)];
 
-            if (currentCategory === 'verbs') {
-                // TRIPLE MATCH für Unregelmäßige Verben (Grundform, Simple Past, Past Participle)
-                speakWord(item.base);
+            if (item.past) {
                 let correctCombination = `${item.base} ➔ ${item.past} ➔ ${item.pp}`;
 
                 container.innerHTML = `
                     <div class="text-center space-y-4 w-full">
                         <h3 class="font-bold text-slate-700">Finde die 3 Formen für: <span class="text-indigo-600 text-xl">${item.de}</span></h3>
-                        <button onclick="speakWord('${item.base}')" class="bg-sky-100 text-sky-600 px-3 py-1 rounded-full text-sm font-bold">🔊 Anhören</button>
                         <div class="grid grid-cols-1 gap-2 mt-4" id="options"></div>
                     </div>
                 `;
@@ -282,8 +434,10 @@
                 let choices = [correctCombination];
                 while(choices.length < 4) {
                     let r1 = currentItems[Math.floor(Math.random() * currentItems.length)];
-                    let combo = `${r1.base} ➔ ${r1.past} ➔ ${r1.pp}`;
-                    if(!choices.includes(combo)) choices.push(combo);
+                    if (r1.past) {
+                        let combo = `${r1.base} ➔ ${r1.past} ➔ ${r1.pp}`;
+                        if(!choices.includes(combo)) choices.push(combo);
+                    }
                 }
                 choices.sort(() => Math.random() - 0.5);
 
@@ -303,12 +457,9 @@
                 });
 
             } else {
-                // Normales Match für Vokabel-Units (Wort & Übersetzung)
-                speakWord(item.base);
                 container.innerHTML = `
                     <div class="text-center space-y-4 w-full">
                         <h3 class="font-bold text-slate-700">Finde die Übersetzung für: <span class="text-indigo-600 text-xl">${item.de}</span></h3>
-                        <button onclick="speakWord('${item.base}')" class="bg-sky-100 text-sky-600 px-3 py-1 rounded-full text-sm font-bold">🔊 Anhören</button>
                         <div class="grid grid-cols-2 gap-3 mt-4" id="options"></div>
                     </div>
                 `;
@@ -316,8 +467,10 @@
                 const optionsContainer = document.getElementById('options');
                 let choices = [item.target];
                 while(choices.length < 4) {
-                    let randomItem = currentItems[Math.floor(Math.random() * currentItems.length)].target;
-                    if(!choices.includes(randomItem)) choices.push(randomItem);
+                    let randomItem = currentItems[Math.floor(Math.random() * currentItems.length)];
+                    if (randomItem.target && !choices.includes(randomItem.target)) {
+                        choices.push(randomItem.target);
+                    }
                 }
                 choices.sort(() => Math.random() - 0.5);
 
@@ -341,7 +494,7 @@
         function initDetectiveGame() {
             const container = document.getElementById('game-screen');
             const item = currentItems[Math.floor(Math.random() * currentItems.length)];
-            let targetValue = currentCategory === 'verbs' ? item.past : item.target;
+            let targetValue = item.past ? item.past : item.target;
             
             container.innerHTML = `
                 <div class="text-center space-y-4 w-full">
@@ -355,8 +508,8 @@
             let choices = [targetValue];
             while(choices.length < 4) {
                 let rItem = currentItems[Math.floor(Math.random() * currentItems.length)];
-                let val = currentCategory === 'verbs' ? rItem.past : rItem.target;
-                if(!choices.includes(val)) choices.push(val);
+                let val = rItem.past ? rItem.past : rItem.target;
+                if(val && !choices.includes(val)) choices.push(val);
             }
             choices.sort(() => Math.random() - 0.5);
 
@@ -415,14 +568,14 @@
 
         function startRunner() {
             if (state.tokens < 1) {
-                alert("Du brauchst mindestens 1 🪙 Token, um Springer Arcade zu spielen!\n\nLerne zuerst Vokabeln im Hauptmenü, um XP und Token zu sammeln!");
+                alert("Du brauchst mindestens 1 🪙 Token, um Springer Arcade zu spielen!\n\nLerne zuerst Vokabeln, um XP und Token zu sammeln!");
                 return;
             }
             state.tokens--;
             updateHUD();
 
-            document.getElementById('mode-select-screen').classList.add('hidden');
-            document.getElementById('category-screen').classList.add('hidden');
+            document.getElementById('main-select-screen').classList.add('hidden');
+            document.getElementById('games-menu-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
             document.getElementById('back-btn').classList.remove('hidden');
             document.getElementById('current-selection-label').innerText = "Springer Arcade 🪙";
@@ -460,7 +613,6 @@
                 if (gameOver) return;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                // Viel langsamere und sanftere Geschwindigkeitssteigerung, damit 200+ Punkte leicht machbar sind
                 let gameSpeed = 2.4 + Math.min(score / 300, 3.0);
 
                 p.vy += p.gravity;
@@ -471,7 +623,6 @@
                 ctx.font = '28px sans-serif';
                 ctx.fillText('♞', p.x, p.y + 24);
 
-                // Hindernisse kommen in etwas größeren Abständen
                 if (Math.random() < (0.009 + Math.min(score / 15000, 0.006))) {
                     obstacles.push({ x: 320, y: 145, w: 25, h: 25, type: ['♙','♖','♗'][Math.floor(Math.random()*3)] });
                 }
